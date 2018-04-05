@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 import java.util.Random;
 import javax.swing.JPanel;
 
-public class MoveRect extends JPanel implements Runnable {
+public class MoveTriangle extends JPanel implements Runnable {
 
 	private GUIAssignment1 gui;
 	private Graphics2D g;
@@ -17,7 +17,7 @@ public class MoveRect extends JPanel implements Runnable {
 	private Thread thread;
 	
 	
-	public MoveRect(GUIAssignment1 guiAssignment1) {
+	public MoveTriangle(GUIAssignment1 guiAssignment1) {
 		this.gui = guiAssignment1;
 		x1 = 50;
 		y1 = 150;

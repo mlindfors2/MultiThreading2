@@ -34,7 +34,7 @@ public class GUIAssignment1
 	private JComboBox cmbSkill;	// Skill combo box, needs to be filled in
 
 	private MoveText pnlMove;
-	private MoveRect pnlRotate;
+	private MoveTriangle pnlRotate;
 	private Graphics2D gg;
 	/**
 	 * Constructor
@@ -65,7 +65,7 @@ public class GUIAssignment1
 	private void InitializeGUI()
 	{
 		pnlMove = new MoveText(this);
-		pnlRotate = new MoveRect(this);
+		pnlRotate = new MoveTriangle(this);
 		// The music player outer panel
 		JPanel pnlSound = new JPanel();
 		Border b1 = BorderFactory.createTitledBorder("Music Player");
