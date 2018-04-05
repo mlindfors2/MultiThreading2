@@ -1,12 +1,16 @@
 package assignment1;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.util.Random;
-
 import javax.swing.JPanel;
+/**
+ * Class that extends JPanel and implements Runnable and paints "test" and a
+ * Thread runs randomization of the coordinates.
+ * 
+ * @author Mikael Lindfors
+ *
+ */
 
 public class MoveText extends JPanel implements Runnable {
 
@@ -17,55 +21,57 @@ public class MoveText extends JPanel implements Runnable {
 	private int x, y;
 	private Thread thread;
 
+	/**
+	 * Constructor that makes a link to the GUI.
+	 * 
+	 * @param guiAssignment1 Link to the GUI.
+	 */
 	public MoveText(GUIAssignment1 guiAssignment1) {
 		this.gui = guiAssignment1;
-		// this.g = g;
-		// this.setBackground(Color.BLACK);
-		// this.setVisible(true);
 	}
-
-	public void setGraphics(Graphics g) {
-		this.g = (Graphics2D) g;
-	}
-
-	public void drawText(Graphics2D g) {
-
-		// System.out.println("X: " + x + " "+ "Y: "+y);
-
-	}
-
+	/**
+	 * Method that starts a new Thread if no thread is currently running.
+	 */
 	public void startMoving() {
 		if (!running) {
 			thread = new Thread(this);
 			thread.start();
 			running = true;
 		}
-
 	}
 
+	/**
+	 * Method that stops the thread from executing in the run-method, unless no
+	 * thread exist.
+	 */
 	public void stopMe() {
 		if (thread != null)
 			running = false;
-
 	}
 
+	/**
+	 * Method that overrides paintComponent in the GUI and draws "Test" in the
+	 * JPanel
+	 * 
+	 * @param Graphics
+	 *            g Graphics object from the JPanel
+	 */
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-//		System.out.println(g.getClipBounds());
 		this.g = (Graphics2D) g;
-
 		g.drawString("Test", x, y);
-		x = rand.nextInt(200);
-		y = rand.nextInt(200);
-
-		// drawText(this.g);
-
 	}
 
+	/**
+	 * Method that the thread runs with 40ms pause. Randomizes the x and y
+	 * coordinates.
+	 */
 	public void run() {
 
 		while (running) {
 			repaint();
+			x = rand.nextInt(200);
+			y = rand.nextInt(200);
 			try {
 				Thread.sleep(500);
 			} catch (Exception ee) {

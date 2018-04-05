@@ -33,6 +33,7 @@ public class GUIAssignment1
 	private JTextArea txtHits;	// Dispaly hits
 	private JComboBox cmbSkill;	// Skill combo box, needs to be filled in
 
+	
 	private MoveText pnlMove;
 	private MoveTriangle pnlRotate;
 	private Graphics2D gg;
@@ -173,29 +174,23 @@ public class GUIAssignment1
 		pnlGame.setBorder(b41);
 		pnlCatchme.add(pnlGame);
 		frame.add(pnlCatchme);
-	
-//		pnlMove.revalidate();
-//		pnlMove.repaint();
-//		moveText = new MoveText();
-//		Graphics gg = pnlMove.getGraphics();
 		btnDisplay.addActionListener(new ButtonListener());
 		btnDStop.addActionListener(new ButtonListener());
 		btnTriangle.addActionListener(new ButtonListener());
 		btnTStop.addActionListener(new ButtonListener());
 		
 	}
-	
-//	public void repaint() {
-//		pnlMove.repaint();
-//	}
-
-
+	/**
+	 * Class that listens to the JButtons
+	 * Implements ActionListener. 
+	 * @author Mikael Lindfors
+	 *
+	 */
 	private class ButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
 			// Starts display text moving
 			if (e.getSource() == btnDisplay) {
-//				pnlMove.setGraphics(gg);
 				pnlMove.startMoving();
 			}
 			if (e.getSource() == btnDStop) {
