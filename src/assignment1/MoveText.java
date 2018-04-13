@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.Random;
 import javax.swing.JPanel;
+
 /**
  * Class that extends JPanel and implements Runnable and paints "test" and a
  * Thread runs randomization of the coordinates.
@@ -29,6 +30,7 @@ public class MoveText extends JPanel implements Runnable {
 	public MoveText(GUIAssignment1 guiAssignment1) {
 		this.gui = guiAssignment1;
 	}
+
 	/**
 	 * Method that starts a new Thread if no thread is currently running.
 	 */
@@ -53,8 +55,7 @@ public class MoveText extends JPanel implements Runnable {
 	 * Method that overrides paintComponent in the GUI and draws "Test" in the
 	 * JPanel
 	 * 
-	 * @param Graphics
-	 *            g Graphics object from the JPanel
+	 * @param Graphics g Graphics object from the JPanel
 	 */
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -78,6 +79,21 @@ public class MoveText extends JPanel implements Runnable {
 				ee.printStackTrace();
 			}
 
+		}
+
+	}
+
+	/**
+	 * Method used when closing the program window. Method will join threads and
+	 * shut down.
+	 */
+	public void stopEverything() {
+		try {
+			running = false;
+			thread.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 	}

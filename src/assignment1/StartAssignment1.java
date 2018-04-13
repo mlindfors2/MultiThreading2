@@ -2,12 +2,16 @@ package assignment1;
 
 import javax.swing.SwingUtilities;
 
-
+/**
+ * Mainclass
+ * 
+ * @author mlind
+ *
+ */
 
 public class StartAssignment1 {
 
-	
-	public static void main (String [] args) {
+	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				try {

@@ -27,8 +27,7 @@ public class MoveTriangle extends JPanel implements Runnable {
 	/**
 	 * Constructor that sets the start-coordinates for the triangle
 	 * 
-	 * @param guiAssignment1
-	 *            Link to the GUI.
+	 * @param guiAssignment1 Link to the GUI.
 	 */
 	public MoveTriangle(GUIAssignment1 guiAssignment1) {
 		this.gui = guiAssignment1;
@@ -60,8 +59,11 @@ public class MoveTriangle extends JPanel implements Runnable {
 			running = false;
 		}
 	}
+
 	/**
-	 * Method that overrides paintComponent in the GUI and draws the lines for the triangle.
+	 * Method that overrides paintComponent in the GUI and draws the lines for the
+	 * triangle.
+	 * 
 	 * @param Graphics g Graphics object from the JPanel
 	 */
 	protected void paintComponent(Graphics g) {
@@ -73,8 +75,8 @@ public class MoveTriangle extends JPanel implements Runnable {
 	}
 
 	/**
-	 * Method that the thread runs with 40ms pause. Moves the x and y coordinates back
-	 * and forth within the JPanel edges.
+	 * Method that the thread runs with 40ms pause. Moves the x and y coordinates
+	 * back and forth within the JPanel edges.
 	 */
 	public void run() {
 		while (running) {
@@ -97,5 +99,20 @@ public class MoveTriangle extends JPanel implements Runnable {
 				ee.printStackTrace();
 			}
 		}
+	}
+
+	/**
+	 * Method used when closing the program window. Method will join threads and
+	 * shut down.
+	 */
+	public void stopEverything() {
+		try {
+			running = false;
+			thread.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 }
