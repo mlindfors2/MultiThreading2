@@ -2,94 +2,99 @@
 package assignment3;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
 /**
  * The GUI for assignment 3
  */
-public class GUISemaphore 
-{
+public class GUISemaphore implements ActionListener {
 	/**
-	 * These are the components you need to handle.
-	 * You have to add listeners and/or code
-	 * Static controls are defined inline
+	 * These are the components you need to handle. You have to add listeners and/or
+	 * code Static controls are defined inline
 	 */
-	private JFrame frame;				// The Main window
-	private JProgressBar bufferStatus;	// The progressbar, showing content in buffer
-	
+	private JFrame frame; // The Main window
+	private JProgressBar bufferStatus; // The progressbar, showing content in buffer
+
 	// Data for Producer Scan
-	private JButton btnStartS;			// Button start Scan
-	private JButton btnStopS;			// Button stop Scan
-	private JLabel lblStatusS;			// Status Scan
+	private JButton btnStartS; // Button start Scan
+	private JButton btnStopS; // Button stop Scan
+	private JLabel lblStatusS; // Status Scan
 	// DAta for producer Arla
-	private JButton btnStartA;			// Button start Arla
-	private JButton btnStopA;			// Button stop Arla
-	private JLabel lblStatusA;			// Status Arla
-	//Data for producer AxFood
-	private JButton btnStartX;			// Button start AxFood
-	private JButton btnStopX;			// Button stop AxFood
-	private JLabel lblStatusX;			// Status AxFood
-	
+	private JButton btnStartA; // Button start Arla
+	private JButton btnStopA; // Button stop Arla
+	private JLabel lblStatusA; // Status Arla
+	// Data for producer AxFood
+	private JButton btnStartX; // Button start AxFood
+	private JButton btnStopX; // Button stop AxFood
+	private JLabel lblStatusX; // Status AxFood
+
 	// Data for consumer ICA
-	private JLabel lblIcaItems;			// Ica limits
+	private JLabel lblIcaItems; // Ica limits
 	private JLabel lblIcaWeight;
 	private JLabel lblIcaVolume;
-	private JLabel lblIcaStatus;		// load status
-	private JTextArea lstIca;			// The cargo list
-	private JButton btnIcaStart;		// The buttons
+	private JLabel lblIcaStatus; // load status
+	private JTextArea lstIca; // The cargo list
+	private JButton btnIcaStart; // The buttons
 	private JButton btnIcaStop;
-	private JCheckBox chkIcaCont;		// Continue checkbox
-	//Data for consumer COOP
+	private JCheckBox chkIcaCont; // Continue checkbox
+	// Data for consumer COOP
 	private JLabel lblCoopItems;
 	private JLabel lblCoopWeight;
 	private JLabel lblCoopVolume;
-	private JLabel lblCoopStatus;		// load status
-	private JTextArea lstCoop;			// The cargo list
-	private JButton btnCoopStart;		// The buttons
+	private JLabel lblCoopStatus; // load status
+	private JTextArea lstCoop; // The cargo list
+	private JButton btnCoopStart; // The buttons
 	private JButton btnCoopStop;
-	private JCheckBox chkCoopCont;		// Continue checkbox
+	private JCheckBox chkCoopCont; // Continue checkbox
 	// Data for consumer CITY GROSS
 	private JLabel lblCGItems;
 	private JLabel lblCGWeight;
 	private JLabel lblCGVolume;
-	private JLabel lblCGStatus;			// load status
-	private JTextArea lstCG;			// The cargo list
-	private JButton btnCGStart;			// The buttons
+	private JLabel lblCGStatus; // load status
+	private JTextArea lstCG; // The cargo list
+	private JButton btnCGStart; // The buttons
 	private JButton btnCGStop;
-	private JCheckBox chkCGCont;		// Continue checkbox
-	
+	private JCheckBox chkCGCont; // Continue checkbox
+
+	private Buffer buffer;
+	private Producer hkscan;
+	private Producer axfood;
+	private Producer arla;
+	private Consumer ica;
+	private Consumer citygross;
+	private Consumer coop;
+
 	/**
 	 * Constructor, creates the window
 	 */
-	public GUISemaphore()
-	{
+	public GUISemaphore() {
 	}
-	
+
 	/**
 	 * Starts the application
 	 */
-	public void Start()
-	{
+	public void start() {
 		frame = new JFrame();
 		frame.setBounds(0, 0, 730, 526);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(null);
 		frame.setTitle("Food Supply System");
-		InitializeGUI();					// Fill in components
+		InitializeGUI(); // Fill in components
 		frame.setVisible(true);
-		frame.setResizable(false);			// Prevent user from change size
-		frame.setLocationRelativeTo(null);	// Start middle screen
+		frame.setResizable(false); // Prevent user from change size
+		frame.setLocationRelativeTo(null); // Start middle screen
 	}
-	
+
 	/**
 	 * Sets up the GUI with components
 	 */
-	private void InitializeGUI()
-	{
+	private void InitializeGUI() {
 		// First create the three main panels
 		JPanel pnlBuffer = new JPanel();
-		pnlBuffer.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),"Storage"));
+		pnlBuffer.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Storage"));
 		pnlBuffer.setBounds(13, 403, 693, 82);
 		pnlBuffer.setLayout(null);
 		// Then create the progressbar, only component in buffer panel
@@ -99,26 +104,27 @@ public class GUISemaphore
 		bufferStatus.setForeground(Color.GREEN);
 		pnlBuffer.add(bufferStatus);
 		JLabel lblmax = new JLabel("Max capacity (items):");
-		lblmax.setBounds(10, 42, 126,13);
+		lblmax.setBounds(10, 42, 126, 13);
 		pnlBuffer.add(lblmax);
 		frame.add(pnlBuffer);
-		
+
 		JPanel pnlProd = new JPanel();
-		pnlProd.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),"Producers"));
+		pnlProd.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Producers"));
 		pnlProd.setBounds(13, 13, 229, 379);
 		pnlProd.setLayout(null);
-		
+
 		JPanel pnlCons = new JPanel();
-		pnlCons.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),"Consumers"));
+		pnlCons.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Consumers"));
 		pnlCons.setBounds(266, 13, 440, 379);
 		pnlCons.setLayout(null);
-		
+
 		// Now add the three panels to producer panel
 		JPanel pnlScan = new JPanel();
-		pnlScan.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),"Producer: Scan"));
+		pnlScan.setBorder(
+				BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Producer: Scan"));
 		pnlScan.setBounds(6, 19, 217, 100);
 		pnlScan.setLayout(null);
-		
+
 		// Content Scan panel
 		btnStartS = new JButton("Start Producing");
 		btnStartS.setBounds(10, 59, 125, 23);
@@ -129,15 +135,16 @@ public class GUISemaphore
 		lblStatusS = new JLabel("Staus Idle/Stop/Producing");
 		lblStatusS.setBounds(10, 31, 200, 13);
 		pnlScan.add(lblStatusS);
-		// Add Scan panel to producers		
+		// Add Scan panel to producers
 		pnlProd.add(pnlScan);
-		
+
 		// The Arla panel
 		JPanel pnlArla = new JPanel();
-		pnlArla.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),"Producer: Arla"));
+		pnlArla.setBorder(
+				BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Producer: Arla"));
 		pnlArla.setBounds(6, 139, 217, 100);
 		pnlArla.setLayout(null);
-		
+
 		// Content Arla panel
 		btnStartA = new JButton("Start Producing");
 		btnStartA.setBounds(10, 59, 125, 23);
@@ -148,15 +155,16 @@ public class GUISemaphore
 		lblStatusA = new JLabel("Staus Idle/Stop/Producing");
 		lblStatusA.setBounds(10, 31, 200, 13);
 		pnlArla.add(lblStatusA);
-		// Add Arla panel to producers		
+		// Add Arla panel to producers
 		pnlProd.add(pnlArla);
-		
+
 		// The AxFood Panel
 		JPanel pnlAxfood = new JPanel();
-		pnlAxfood.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),"Producer: AxFood"));
+		pnlAxfood.setBorder(
+				BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Producer: AxFood"));
 		pnlAxfood.setBounds(6, 262, 217, 100);
 		pnlAxfood.setLayout(null);
-		
+
 		// Content AxFood Panel
 		btnStartX = new JButton("Start Producing");
 		btnStartX.setBounds(10, 59, 125, 23);
@@ -167,21 +175,23 @@ public class GUISemaphore
 		lblStatusX = new JLabel("Staus Idle/Stop/Producing");
 		lblStatusX.setBounds(10, 31, 200, 13);
 		pnlAxfood.add(lblStatusX);
-		// Add Axfood panel to producers		
+		// Add Axfood panel to producers
 		pnlProd.add(pnlAxfood);
-		// Producer panel done, add to frame		
+		// Producer panel done, add to frame
 		frame.add(pnlProd);
-		
+
 		// Next, add the three panels to Consumer panel
 		JPanel pnlICA = new JPanel();
-		pnlICA.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),"Consumer: ICA"));
-		pnlICA.setBounds(19, 19,415, 100);
+		pnlICA.setBorder(
+				BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Consumer: ICA"));
+		pnlICA.setBounds(19, 19, 415, 100);
 		pnlICA.setLayout(null);
-		
+
 		// Content ICA panel
 		// First the limits panel
 		JPanel pnlLim = new JPanel();
-		pnlLim.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),"Package Limits"));
+		pnlLim.setBorder(
+				BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Package Limits"));
 		pnlLim.setBounds(6, 19, 107, 75);
 		pnlLim.setLayout(null);
 		JLabel lblItems = new JLabel("Items:");
@@ -206,7 +216,7 @@ public class GUISemaphore
 		// Then rest of controls
 		lstIca = new JTextArea();
 		lstIca.setEditable(false);
-		JScrollPane spane = new JScrollPane(lstIca);		
+		JScrollPane spane = new JScrollPane(lstIca);
 		spane.setBounds(307, 16, 102, 69);
 		spane.setBorder(BorderFactory.createLineBorder(Color.black));
 		pnlICA.add(spane);
@@ -224,17 +234,19 @@ public class GUISemaphore
 		pnlICA.add(chkIcaCont);
 		// All done, add to consumers panel
 		pnlCons.add(pnlICA);
-		
+
 		JPanel pnlCOOP = new JPanel();
-		pnlCOOP.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),"Consumer: COOP"));
+		pnlCOOP.setBorder(
+				BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Consumer: COOP"));
 		pnlCOOP.setBounds(19, 139, 415, 100);
 		pnlCOOP.setLayout(null);
 		pnlCons.add(pnlCOOP);
-		
+
 		// Content COOP panel
 		// First the limits panel
 		JPanel pnlLimC = new JPanel();
-		pnlLimC.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),"Package Limits"));
+		pnlLimC.setBorder(
+				BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Package Limits"));
 		pnlLimC.setBounds(6, 19, 107, 75);
 		pnlLimC.setLayout(null);
 		JLabel lblItemsC = new JLabel("Items:");
@@ -259,7 +271,7 @@ public class GUISemaphore
 		// Then rest of controls
 		lstCoop = new JTextArea();
 		lstCoop.setEditable(false);
-		JScrollPane spaneC = new JScrollPane(lstCoop);		
+		JScrollPane spaneC = new JScrollPane(lstCoop);
 		spaneC.setBounds(307, 16, 102, 69);
 		spaneC.setBorder(BorderFactory.createLineBorder(Color.black));
 		pnlCOOP.add(spaneC);
@@ -277,17 +289,19 @@ public class GUISemaphore
 		pnlCOOP.add(chkCoopCont);
 		// All done, add to consumers panel
 		pnlCons.add(pnlCOOP);
-		
+
 		JPanel pnlCG = new JPanel();
-		pnlCG.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),"Consumer: CITY GROSS"));
+		pnlCG.setBorder(
+				BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Consumer: CITY GROSS"));
 		pnlCG.setBounds(19, 262, 415, 100);
 		pnlCG.setLayout(null);
 		pnlCons.add(pnlCG);
-		
+
 		// Content CITY GROSS panel
 		// First the limits panel
 		JPanel pnlLimG = new JPanel();
-		pnlLimG.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),"Package Limits"));
+		pnlLimG.setBorder(
+				BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Package Limits"));
 		pnlLimG.setBounds(6, 19, 107, 75);
 		pnlLimG.setLayout(null);
 		JLabel lblItemsG = new JLabel("Items:");
@@ -312,7 +326,7 @@ public class GUISemaphore
 		// Then rest of controls
 		lstCG = new JTextArea();
 		lstCG.setEditable(false);
-		JScrollPane spaneG = new JScrollPane(lstCG);		
+		JScrollPane spaneG = new JScrollPane(lstCG);
 		spaneG.setBounds(307, 16, 102, 69);
 		spaneG.setBorder(BorderFactory.createLineBorder(Color.black));
 		pnlCG.add(spaneG);
@@ -330,8 +344,81 @@ public class GUISemaphore
 		pnlCG.add(chkCGCont);
 		// All done, add to consumers panel
 		pnlCons.add(pnlCOOP);
-		
+
 		// Add consumer panel to frame
 		frame.add(pnlCons);
+		buffer = new Buffer(50);
+		arla = new Producer(buffer, "Arla");
+		hkscan = new Producer(buffer, "Hkscan");
+		axfood = new Producer(buffer, "Axfood");
+
+		ica = new Consumer(buffer, "Ica", 100, 50, 50);
+		coop = new Consumer(buffer, "Coop", 100, 50, 50);
+		citygross = new Consumer(buffer, "CityGross", 100,50,50);
+		btnStartS.addActionListener(this);
+		btnStopS.addActionListener(this);
+		btnStartA.addActionListener(this);
+		btnStopA.addActionListener(this);
+		btnStartX.addActionListener(this);
+		btnStopX.addActionListener(this);
+		btnIcaStart.addActionListener(this);
+		btnIcaStop.addActionListener(this);
+		btnCoopStart.addActionListener(this);
+		btnCoopStop.addActionListener(this);
+		btnCGStart.addActionListener(this);
+		btnCGStop.addActionListener(this);
+	}
+	
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnStartS) {
+			// SCAN start
+			hkscan.startThread();
+		}
+		if (e.getSource() == btnStopS) {
+			// SCAN Stop
+			hkscan.stopThread();
+		}
+		if (e.getSource() == btnStartA) {
+			// Arla start
+			arla.startThread();
+		}
+		if (e.getSource() == btnStopA) {
+			// Arla stop
+			arla.stopThread();
+		}
+		if (e.getSource() == btnStartX) {
+			// Axfood start
+			axfood.startThread();
+		}
+		if (e.getSource() == btnStopX) {
+			// Axfood stop
+			axfood.stopThread();
+		}
+		
+		if (e.getSource() == btnIcaStart) {
+			//ICA START
+			if ()
+			ica.startThread();
+		}
+		if ( e.getSource() == btnIcaStop) {
+			//ICA STOP
+			ica.stopThread();
+		}
+		if ( e.getSource() == btnCoopStart) {
+			//Coop start
+			coop.startThread();
+		}
+		if ( e.getSource() == btnCGStart) {
+			//CityGross start
+			citygross.startThread();
+		}
+		if ( e.getSource() == btnCGStop) {
+			//CityGross stop
+			citygross.stopThread();
+		}
+		
+		
 	}
 }

@@ -1,22 +1,54 @@
 package assignment3;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.concurrent.Semaphore;
 
 public class Buffer {
 
-//	private ArrayList<FoodItem> queue = new ArrayList<FoodItem>();
-	private FoodItem[] queue;
+	private LinkedList<FoodItem> queue = new LinkedList<FoodItem>();
 	private int maxCapacity;
+	private Semaphore semaphore;
+	private int readers;
+	private int writers;
 
 	public Buffer(int maxCapacity) {
 		this.maxCapacity = maxCapacity;
-		queue = new FoodItem[maxCapacity];
+		this.semaphore = new Semaphore(2);
 	}
-	public void push() {
-		
+
+	public void push(FoodItem item) {
+		if (queue.size() == maxCapacity) {
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		} else {
+
+			try {
+				semaphore.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			queue.addLast(item);
+			notify();
+		}
 	}
-	
+
 	public FoodItem pop() {
-		return null;
+		FoodItem item = null;
+		if (queue.size() > 0) {
+			item = queue.removeFirst();
+		} else {
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+
+		}
+
+		return item;
+
 	}
 }

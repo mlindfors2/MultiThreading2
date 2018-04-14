@@ -44,6 +44,7 @@ public class Producer implements Runnable {
 	public void run() {
 		while (running) {
 			FoodItem food = foodBuffer[rand.nextInt(20)];
+			buffer.push(food);
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {

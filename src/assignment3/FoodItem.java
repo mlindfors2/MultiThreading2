@@ -10,4 +10,11 @@ public class FoodItem {
 		this.volume = volume;
 		this.weight = weight;
 	}
+	public double getWeight() {
+		return weight;
+	}
+	
+	public double getVolume () {
+		return volume;
+	}
 }
