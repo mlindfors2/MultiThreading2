@@ -137,7 +137,9 @@ public class JGUIAssignment2 implements ActionListener {
 		writer = new Writer(buffer, listW, lblTrans);
 		reader = new Reader(buffer, listR, lblRec);
 	}
-
+/**
+ * Method that reset the fields in the UI.
+ */
 	private void clearFields() {
 		listW.setText("");
 		listR.setText("");
@@ -147,7 +149,9 @@ public class JGUIAssignment2 implements ActionListener {
 		pnlRes.setBackground(Color.GRAY);
 		lblStatus.setText("");
 	}
-
+/**
+ * Method that compare result between writer and reader. Not used at the moment.
+ */
 	public void checkStatus() {
 		if (lblTrans.getText().equals(lblRec.getText())) {
 			lblStatus.setText("Success!");
@@ -157,7 +161,10 @@ public class JGUIAssignment2 implements ActionListener {
 			pnlRes.setBackground(Color.RED);
 		}
 	}
-
+/**
+ * ButtonListener that listen to the btnRun button and check if async or sync mode is chosen.
+ * If the clear is used the clearFields() method will run.
+ */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnRun && bSync.isSelected()) {

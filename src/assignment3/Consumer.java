@@ -1,5 +1,8 @@
 package assignment3;
 
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+
 public class Consumer implements Runnable {
 
 	private Buffer buffer;
@@ -13,8 +16,14 @@ public class Consumer implements Runnable {
 	private int numberOfItems;
 	private boolean running = false;
 	private boolean continueLoad = false;
+	private JLabel lblStoreItems;
+	private JLabel lblStoreWeight;
+	private JLabel lblStoreVolume;
+	private JTextArea lstStore;
+	
+	
 
-	public Consumer(Buffer buffer, String name, double weightLimitation, double volumeLimitation, int maxNumberOfItems) {
+	public Consumer(Buffer buffer, String name, double weightLimitation, double volumeLimitation, int maxNumberOfItems, JLabel lblStoreItems, JLabel lblStoreWeight, JLabel lblStoreVolume, JTextArea lstStore) {
 		this.buffer = buffer;
 		this.name = name;
 		this.weightLimitation = weightLimitation;
@@ -22,7 +31,13 @@ public class Consumer implements Runnable {
 		this.maxNumberOfItems = maxNumberOfItems;
 		this.currentVolumeLeft = volumeLimitation;
 		this.currentWeightLeft = weightLimitation;
-
+		this.lblStoreItems = lblStoreItems;
+		this.lblStoreWeight = lblStoreWeight;
+		this.lblStoreVolume = lblStoreVolume;
+		this.lstStore = lstStore;
+	}
+	public void setContinuesLoad(boolean status) {
+		this.continueLoad = status;
 	}
 
 	public boolean checkIfFull() {
@@ -52,10 +67,14 @@ public class Consumer implements Runnable {
 	public void run() {
 		while (running) {
 			FoodItem item = buffer.pop();
-			if (currentVolumeLeft - item.getVolume() >= 0 || currentWeightLeft - item.getWeight() >= 0) {
+			lstStore.append(item.getName() + "\n");
+			if ((currentVolumeLeft - item.getVolume() >= 0) && (currentWeightLeft - item.getWeight() >= 0)) {
 				numberOfItems++;
 				currentVolumeLeft= currentVolumeLeft - item.getVolume();
 				currentWeightLeft = currentWeightLeft - item.getWeight();
+				lblStoreItems.setText(""+numberOfItems);
+				lblStoreWeight.setText(""+currentWeightLeft);
+				lblStoreVolume.setText("" + currentVolumeLeft);
 			} else {
 				if (continueLoad) {
 					try {
@@ -70,6 +89,7 @@ public class Consumer implements Runnable {
 				} else {
 					running = false;
 					try {
+						System.out.println("avbröts");
 						t1.join();
 					} catch (InterruptedException e) {
 						e.printStackTrace();

@@ -4,7 +4,11 @@ import java.util.Random;
 
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
-
+/**
+ * Class that writes characters to a Buffer in sync/async mode.
+ * @author mlind
+ *
+ */
 public class Writer implements Runnable {
 	private boolean running = false;
 	private Thread t1;
@@ -21,7 +25,11 @@ public class Writer implements Runnable {
 		this.lblTrans = lblTrans;
 		this.lblTrans.setText("");
 	}
-
+/**
+ * Method that starts the thread in writer and set the mode to async or sync.
+ * @param text String to be send to the buffer
+ * @param async Boolean async on or off.
+ */
 	public void startWriter(String text, boolean async) {
 		if (!running) {
 			this.async = async;
@@ -31,7 +39,9 @@ public class Writer implements Runnable {
 			running = true;
 		}
 	}
-
+/**
+ * Method that joins the thread and reset booleans.
+ */
 	public void stopWriter() {
 		if (t1 != null) {
 			running = false;
@@ -42,7 +52,10 @@ public class Writer implements Runnable {
 			}
 		}
 	}
-
+/**
+ * Method that write characters from a string to the buffer, one character at a time.
+ * If last character is send, the stopWriter() method will be run.
+ */
 	@Override
 	public void run() {
 		while (!text.equals("")) {

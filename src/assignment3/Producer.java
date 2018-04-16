@@ -2,6 +2,8 @@ package assignment3;
 
 import java.util.Random;
 
+import javax.swing.JLabel;
+
 public class Producer implements Runnable {
 
 	private Buffer buffer;
@@ -10,10 +12,12 @@ public class Producer implements Runnable {
 	private Random rand = new Random();
 	private String name;
 	private FoodItem[] foodBuffer;
+	private JLabel lblStatusP;
 
-	public Producer(Buffer buffer, String name) {
+	public Producer(Buffer buffer, String name, JLabel lblStatusP) {
 		this.buffer = buffer;
 		this.name = name;
+		this.lblStatusP = lblStatusP;
 		initFoodItems();
 	}
 
@@ -26,6 +30,7 @@ public class Producer implements Runnable {
 			t1 = new Thread(this);
 			t1.start();
 			running = true;
+			lblStatusP.setText("Producing");
 		}
 	}
 
@@ -33,6 +38,7 @@ public class Producer implements Runnable {
 		if (t1 != null) {
 			try {
 				running = false;
+				lblStatusP.setText("Stop");
 				t1.join();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -44,6 +50,7 @@ public class Producer implements Runnable {
 	public void run() {
 		while (running) {
 			FoodItem food = foodBuffer[rand.nextInt(20)];
+			food.setProducerName(this.name);
 			buffer.push(food);
 			try {
 				Thread.sleep(1000);

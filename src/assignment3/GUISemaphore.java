@@ -347,14 +347,14 @@ public class GUISemaphore implements ActionListener {
 
 		// Add consumer panel to frame
 		frame.add(pnlCons);
-		buffer = new Buffer(50);
-		arla = new Producer(buffer, "Arla");
-		hkscan = new Producer(buffer, "Hkscan");
-		axfood = new Producer(buffer, "Axfood");
+		buffer = new Buffer(50, bufferStatus, lblStatusA, lblStatusS,lblStatusX);
+		arla = new Producer(buffer, "Arla", lblStatusA);
+		hkscan = new Producer(buffer, "Hkscan", lblStatusS);
+		axfood = new Producer(buffer, "Axfood",lblStatusX);
 
-		ica = new Consumer(buffer, "Ica", 100, 50, 50);
-		coop = new Consumer(buffer, "Coop", 100, 50, 50);
-		citygross = new Consumer(buffer, "CityGross", 100,50,50);
+		ica = new Consumer(buffer, "Ica", 100, 50, 50, lblIcaItems, lblIcaWeight, lblIcaVolume, lstIca);
+		coop = new Consumer(buffer, "Coop", 100, 50, 50, lblCoopItems, lblCoopWeight, lblCoopVolume, lstCoop);
+		citygross = new Consumer(buffer, "CityGross", 100, 50, 50, lblCGItems, lblCGWeight, lblCGVolume, lstCG);
 		btnStartS.addActionListener(this);
 		btnStopS.addActionListener(this);
 		btnStartA.addActionListener(this);
@@ -368,7 +368,6 @@ public class GUISemaphore implements ActionListener {
 		btnCGStart.addActionListener(this);
 		btnCGStop.addActionListener(this);
 	}
-	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -396,29 +395,35 @@ public class GUISemaphore implements ActionListener {
 			// Axfood stop
 			axfood.stopThread();
 		}
-		
+
 		if (e.getSource() == btnIcaStart) {
-			//ICA START
-			if ()
+			// ICA START
+			if (chkIcaCont.isSelected()) {
+				ica.setContinuesLoad(true);
+			}
 			ica.startThread();
 		}
-		if ( e.getSource() == btnIcaStop) {
-			//ICA STOP
+		if (e.getSource() == btnIcaStop) {
+			// ICA STOP
 			ica.stopThread();
 		}
-		if ( e.getSource() == btnCoopStart) {
-			//Coop start
+		if (e.getSource() == btnCoopStart) {
+			if (chkCoopCont.isSelected()) {
+				coop.setContinuesLoad(true);
+			}
 			coop.startThread();
 		}
-		if ( e.getSource() == btnCGStart) {
-			//CityGross start
+		if (e.getSource() == btnCGStart) {
+			// CityGross start
+			if (chkCGCont.isSelected()) {
+				citygross.setContinuesLoad(true);
+			}
 			citygross.startThread();
 		}
-		if ( e.getSource() == btnCGStop) {
-			//CityGross stop
+		if (e.getSource() == btnCGStop) {
+			// CityGross stop
 			citygross.stopThread();
 		}
-		
-		
+
 	}
 }

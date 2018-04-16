@@ -5,6 +5,12 @@ import java.util.Random;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 
+
+/**
+ * Class that reads Characters from the buffer and sends them as a string to the UI.
+ * @author mlind
+ *
+ */
 public class Reader implements Runnable {
 	private boolean running = false;
 	private Thread t1;
@@ -25,7 +31,11 @@ public class Reader implements Runnable {
 		this.lblRec = lblRec;
 		
 	}
-
+/**
+ * Method that starts the thread 
+ * @param async boolean async on/off
+ * @param length numbers of characters to receieve
+ */
 	public void startReader(boolean async, int length) {
 		if (!running) {
 			this.async = async;
@@ -36,6 +46,9 @@ public class Reader implements Runnable {
 		}
 	}
 
+	/**
+	 * Method that join the thread.
+	 */
 	public void stopReader() {
 		if (t1 != null) {
 			running = false;
@@ -47,6 +60,10 @@ public class Reader implements Runnable {
 		}
 	}
 
+	/**
+	 * Method that fetch characters from the buffer sync/async and store them in
+	 * a result string and sends it to the UI.
+	 */
 	@Override
 	public void run() {
 		int i = 0;
