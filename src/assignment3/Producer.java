@@ -1,8 +1,15 @@
 package assignment3;
 
 import java.util.Random;
-
+import javax.swing.JButton;
 import javax.swing.JLabel;
+
+/**
+ * Class that handles the producers of FoodItems
+ * @author Mikael Lindfors
+ *
+ */
+
 
 public class Producer implements Runnable {
 
@@ -13,55 +20,74 @@ public class Producer implements Runnable {
 	private String name;
 	private FoodItem[] foodBuffer;
 	private JLabel lblStatusP;
+	private JButton btnStartProducer;
+	private JButton btnStopProducer;
 
-	public Producer(Buffer buffer, String name, JLabel lblStatusP) {
+	public Producer(Buffer buffer, String name, JLabel lblStatusP, JButton btnStartProducer, JButton btnStopProducer) {
 		this.buffer = buffer;
 		this.name = name;
 		this.lblStatusP = lblStatusP;
+		this.btnStartProducer = btnStartProducer;
+		this.btnStopProducer = btnStopProducer;
 		initFoodItems();
 	}
 
-	public boolean checkStatus() {
-		return running;
-	}
-
+	/**
+	 * Method that check if program is already running, else it will start a new Thread.
+	 */
 	public void startThread() {
-		if (t1 == null) {
-			t1 = new Thread(this);
-			t1.start();
+		if (!running) {
+			if (t1 == null) {
+				t1 = new Thread(this);
+				t1.start();
+			}
 			running = true;
-			lblStatusP.setText("Producing");
+			btnStartProducer.setEnabled(false);
+			btnStopProducer.setEnabled(true);
 		}
 	}
-
+	/**
+	 * Method that check if program is already running, and if so it will interrupt the work and join the thread
+	 */
 	public void stopThread() {
-		if (t1 != null) {
-			try {
+		if (running) {
+			if (t1 != null) {
 				running = false;
 				lblStatusP.setText("Stop");
-				t1.join();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+				try {
+					t1.join();
+					t1 = null;
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
+			btnStartProducer.setEnabled(true);
+			btnStopProducer.setEnabled(false);
 		}
 	}
 
-	@Override
+	/**
+	 * Run-method that adds a random FoodItem to the queue every 1000ms.
+	 */
 	public void run() {
 		while (running) {
 			FoodItem food = foodBuffer[rand.nextInt(20)];
 			food.setProducerName(this.name);
 			buffer.push(food);
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 
 				e.printStackTrace();
 			}
 		}
 
-	}
+	
 
+	}
+/**
+ * Method that initilize all the FoodItems to our foodBuffer-array.
+ */
 	private void initFoodItems() {
 		foodBuffer = new FoodItem[20];
 		foodBuffer[0] = new FoodItem(1.1, 0.5, "Milk");

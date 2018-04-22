@@ -347,14 +347,18 @@ public class GUISemaphore implements ActionListener {
 
 		// Add consumer panel to frame
 		frame.add(pnlCons);
-		buffer = new Buffer(50, bufferStatus, lblStatusA, lblStatusS,lblStatusX);
-		arla = new Producer(buffer, "Arla", lblStatusA);
-		hkscan = new Producer(buffer, "Hkscan", lblStatusS);
-		axfood = new Producer(buffer, "Axfood",lblStatusX);
+		buffer = new Buffer(50, bufferStatus, lblStatusA, lblStatusS, lblStatusX, lblIcaStatus, lblCoopStatus,
+				lblCGStatus, lblmax);
+		arla = new Producer(buffer, "Arla", lblStatusA, btnStartA, btnStopA);
+		hkscan = new Producer(buffer, "HKscan", lblStatusS, btnStartS, btnStopS);
+		axfood = new Producer(buffer, "Axfood", lblStatusX, btnStartX, btnStopX);
 
-		ica = new Consumer(buffer, "Ica", 100, 50, 50, lblIcaItems, lblIcaWeight, lblIcaVolume, lstIca);
-		coop = new Consumer(buffer, "Coop", 100, 50, 50, lblCoopItems, lblCoopWeight, lblCoopVolume, lstCoop);
-		citygross = new Consumer(buffer, "CityGross", 100, 50, 50, lblCGItems, lblCGWeight, lblCGVolume, lstCG);
+		ica = new Consumer(buffer, "Ica", 100, 50, 50, lblIcaItems, lblIcaWeight, lblIcaVolume, lstIca, lblIcaStatus,
+				btnIcaStart, btnIcaStop);
+		coop = new Consumer(buffer, "Coop", 100, 50, 50, lblCoopItems, lblCoopWeight, lblCoopVolume, lstCoop,
+				lblCoopStatus, btnCoopStart, btnCoopStop);
+		citygross = new Consumer(buffer, "CityGross", 100, 50, 50, lblCGItems, lblCGWeight, lblCGVolume, lstCG,
+				lblCGStatus, btnCGStart, btnCGStop);
 		btnStartS.addActionListener(this);
 		btnStopS.addActionListener(this);
 		btnStartA.addActionListener(this);
@@ -369,59 +373,65 @@ public class GUISemaphore implements ActionListener {
 		btnCGStop.addActionListener(this);
 	}
 
+	/**
+	 * ButtonListeners for all Start/Stop buttons and continues-load checkboxes.
+	 */
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnStartS) {
-			// SCAN start
 			hkscan.startThread();
 		}
 		if (e.getSource() == btnStopS) {
-			// SCAN Stop
 			hkscan.stopThread();
 		}
 		if (e.getSource() == btnStartA) {
-			// Arla start
 			arla.startThread();
 		}
 		if (e.getSource() == btnStopA) {
-			// Arla stop
 			arla.stopThread();
 		}
 		if (e.getSource() == btnStartX) {
-			// Axfood start
 			axfood.startThread();
 		}
 		if (e.getSource() == btnStopX) {
-			// Axfood stop
 			axfood.stopThread();
 		}
-
 		if (e.getSource() == btnIcaStart) {
-			// ICA START
+
 			if (chkIcaCont.isSelected()) {
 				ica.setContinuesLoad(true);
+			}
+			else {
+				ica.setContinuesLoad(false);
 			}
 			ica.startThread();
 		}
 		if (e.getSource() == btnIcaStop) {
-			// ICA STOP
 			ica.stopThread();
 		}
 		if (e.getSource() == btnCoopStart) {
 			if (chkCoopCont.isSelected()) {
 				coop.setContinuesLoad(true);
 			}
+			else {
+				coop.setContinuesLoad(false);
+			}
 			coop.startThread();
 		}
+		if (e.getSource() == btnCoopStop) {
+			coop.stopThread();
+		}
 		if (e.getSource() == btnCGStart) {
-			// CityGross start
 			if (chkCGCont.isSelected()) {
 				citygross.setContinuesLoad(true);
+			}
+			else {
+				citygross.setContinuesLoad(false);
 			}
 			citygross.startThread();
 		}
 		if (e.getSource() == btnCGStop) {
-			// CityGross stop
 			citygross.stopThread();
 		}
 
