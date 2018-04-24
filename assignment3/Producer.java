@@ -53,7 +53,6 @@ public class Producer implements Runnable {
 		if (running) {
 			if (t1 != null) {
 				running = false;
-//				buffer.interruptMutex();
 				lblStatusP.setText("Stop");
 				try {
 					t1.join();

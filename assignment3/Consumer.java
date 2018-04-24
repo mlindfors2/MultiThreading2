@@ -80,7 +80,6 @@ public class Consumer implements Runnable {
 			if (t1 != null) {
 				running = false;
 				lblConsumerStatus.setText("Stop");
-//				buffer.interruptMutex();
 				try {
 					t1.join();
 					t1 = null;
