@@ -152,9 +152,12 @@ public class GUIMonitor implements ActionListener {
 			jFC = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 			int returnValue = jFC.showOpenDialog(null);
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
-				
-				txtPaneSource.setText(readFile().get(0));
-//				Writer w = new Writer();
+				LinkedList<String> list = readFile();
+				for (int i=0;i<list.size();i++) {
+					txtPaneSource.setText(txtPaneSource.getText() + "\n"+list.get(i));
+			
+				}
+
 			}
 
 		}
