@@ -1,15 +1,20 @@
 package assignment4;
 
+import java.util.LinkedList;
+
 import javax.swing.JTextArea;
 
 public class Writer implements Runnable {
 	private JTextArea textArea;
 	private Thread t1;
 	private boolean running;
+	private LinkedList<String> textToWrite = new LinkedList<String>();
+	private BoundedBuffer buffer;
 
-	public Writer(JTextArea textArea) {
+	public Writer(JTextArea textArea, BoundedBuffer buffer) {
 		this.textArea = textArea;
 		running = false;
+		this.buffer = buffer;
 	}
 
 	public void startThread() {
@@ -31,13 +36,16 @@ public class Writer implements Runnable {
 			t1 = null;
 		}
 	}
+
 	public void run() {
-		while(running) {
-			
+		while (running) {
+
 		}
 	}
+
 	public String fetchWordFromTextArea() {
 		String str;
-		str = substring(
+		// str = substring(
+		return null;
 	}
 }

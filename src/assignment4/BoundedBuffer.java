@@ -9,7 +9,7 @@ public class BoundedBuffer {
 	private int writePos;
 	private int readPos;
 	private int findPos;
-	private  JTextArea rtxBox;
+	private JTextArea rtxBox;
 	private String findString;
 	private String replaceString;
 	private int start;
@@ -17,14 +17,41 @@ public class BoundedBuffer {
 	private boolean notify;
 	private Object lockObject;
 	
-	public BoundedBuffer(int maxCapacity) {
-		buffer = new String[maxCapacity];
-		status = new BufferStatus[maxCapacity];
+	public enum BufferStatus {
+		Empty,Checked, New;
 	}
 	
-	
-	
-	
-	
-	
+
+	public BoundedBuffer(int maxCapacity, String findString, String replaceString) {
+		buffer = new String[maxCapacity];
+		this.findString = findString;
+		this.replaceString = replaceString;
+		
+		
+	}
+
+	public void mark() {
+
+	}
+
+	public void modify() {
+
+	}
+
+	public String readData() {
+		return null;
+	}
+
+	public String replaceAt(String strSource, String strReplace, int pos, int size) {
+		return null;
+	}
+
+	public void select() {
+
+	}
+
+	public void writeData(String s) {
+
+	}
+
 }
