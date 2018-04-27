@@ -37,7 +37,12 @@ public class GUIMonitor implements ActionListener {
 	private JButton btnClear; // Removes dest. file and removes marks
 	private JLabel lblChanges; // Label telling number of replacements
 	private JFileChooser jFC;
-	JTextPane txtPaneSource;
+	private JTextPane jTextPaneSource;
+	private JTextPane jTextPaneDest;
+	private BoundedBuffer buffer;
+	private Writer writer;
+	private Reader reader;
+	private Modifier modifier;
 	/**
 	 * Constructor
 	 */
@@ -120,13 +125,17 @@ public class GUIMonitor implements ActionListener {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(12, 170, 653, 359);
 		frame.add(tabbedPane);
-		txtPaneSource = new JTextPane();
-		JScrollPane scrollSource = new JScrollPane(txtPaneSource);
+		jTextPaneSource = new JTextPane();
+		jTextPaneDest = new JTextPane();
+		JScrollPane scrollSource = new JScrollPane(jTextPaneSource);
 		tabbedPane.addTab("Source", null, scrollSource, null);
-		JTextPane txtPaneDest = new JTextPane();
-		JScrollPane scrollDest = new JScrollPane(txtPaneDest);
+		JScrollPane scrollDest = new JScrollPane(jTextPaneDest);
 		tabbedPane.addTab("Destination", null, scrollDest, null);
 		openItem.addActionListener(this);
+		btnCreate.setEnabled(false);
+		btnCreate.addActionListener(this);
+		
+//		jTextPaneDest.setText("");
 	}
 
 	private LinkedList<String> readFile() {
@@ -154,12 +163,31 @@ public class GUIMonitor implements ActionListener {
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
 				LinkedList<String> list = readFile();
 				for (int i=0;i<list.size();i++) {
-					txtPaneSource.setText(txtPaneSource.getText() + "\n"+list.get(i));
+					jTextPaneSource.setText(jTextPaneSource.getText() + "\n"+list.get(i));
 			
 				}
 
 			}
-
+			btnCreate.setEnabled(true);
+		}
+		if (e.getSource() == btnCreate) {
+			buffer = new BoundedBuffer(15, txtFind.getText() +" ", txtReplace.getText()+" ");
+			writer = new Writer(buffer,jTextPaneSource);
+			writer.startThread();
+			int nbr = writer.getNumberOfWords();
+			int nbrBlankLinkes = writer.fetchLinesFromTextPane().length;
+			nbr = nbr + nbrBlankLinkes;
+			modifier = new Modifier(buffer,nbr);
+			modifier.startThread();
+			reader = new Reader(buffer, jTextPaneDest, nbr);
+			reader.startThread();
+//			try {
+//				Thread.sleep(2000);
+//			} catch (InterruptedException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+		
+			LinkedList<String> list = reader.getList();
 		}
 	}
 
