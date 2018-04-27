@@ -43,6 +43,7 @@ public class GUIMonitor implements ActionListener {
 	private Writer writer;
 	private Reader reader;
 	private Modifier modifier;
+
 	/**
 	 * Constructor
 	 */
@@ -134,10 +135,14 @@ public class GUIMonitor implements ActionListener {
 		openItem.addActionListener(this);
 		btnCreate.setEnabled(false);
 		btnCreate.addActionListener(this);
-		
-//		jTextPaneDest.setText("");
 	}
 
+	/**
+	 * Method that reads a file from harddrive and stores every line in a LinkedList
+	 * as string.
+	 * 
+	 * @return LinkedList<String> with a series of String lines.
+	 */
 	private LinkedList<String> readFile() {
 		String readLine;
 		LinkedList<String> list = new LinkedList<String>();
@@ -148,47 +153,46 @@ public class GUIMonitor implements ActionListener {
 				list.add(readLine);
 				readLine = br.readLine();
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return list;
 	}
 
-	@Override
+	/**
+	 * ButtonListener that listen on the Filemenu and handles the 'Open source file'
+	 * alternative. If its chosen a file chooser will open to let the user select a
+	 * file from the harddrive to open and it will display to content in the source
+	 * JTextPane.
+	 */
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == openItem) {
 			jFC = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 			int returnValue = jFC.showOpenDialog(null);
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
 				LinkedList<String> list = readFile();
-				for (int i=0;i<list.size();i++) {
-					jTextPaneSource.setText(jTextPaneSource.getText() + "\n"+list.get(i));
-			
+				for (int i = 0; i < list.size(); i++) {
+					jTextPaneSource.setText(jTextPaneSource.getText() + "\n" + list.get(i));
 				}
-
 			}
 			btnCreate.setEnabled(true);
 		}
+		/**
+		 * If btnCreate button is clicked a buffer and 3 threads with a writer, modifier
+		 * and a reader will be started. Number of words + newLines will be counted and used
+		 * for input to reader and modifier.
+		 */
 		if (e.getSource() == btnCreate) {
-			buffer = new BoundedBuffer(15, txtFind.getText() +" ", txtReplace.getText()+" ");
-			writer = new Writer(buffer,jTextPaneSource);
+			buffer = new BoundedBuffer(15, txtFind.getText() + " ", txtReplace.getText() + " ");
+			writer = new Writer(buffer, jTextPaneSource);
 			writer.startThread();
-			int nbr = writer.getNumberOfWords();
+			int nbrOfWords = writer.getNumberOfWords();
 			int nbrBlankLinkes = writer.fetchLinesFromTextPane().length;
-			nbr = nbr + nbrBlankLinkes;
-			modifier = new Modifier(buffer,nbr);
+			nbrOfWords = nbrOfWords + nbrBlankLinkes;
+			modifier = new Modifier(buffer, nbrOfWords);
 			modifier.startThread();
-			reader = new Reader(buffer, jTextPaneDest, nbr);
+			reader = new Reader(buffer, jTextPaneDest, nbrOfWords);
 			reader.startThread();
-//			try {
-//				Thread.sleep(2000);
-//			} catch (InterruptedException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-		
-			LinkedList<String> list = reader.getList();
 		}
 	}
-
 }
