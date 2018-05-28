@@ -17,11 +17,11 @@ public class ParkSlot {
 		this.number = number;
 	}
 
-	public void setCar(Car car) {
+	public void setParkedCar(Car car) {
 		this.car = car;
 	}
 
-	public Car getCar() {
+	public Car getParkedCar() {
 		return this.car;
 	}
 }

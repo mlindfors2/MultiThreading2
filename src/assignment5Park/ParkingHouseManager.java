@@ -35,9 +35,9 @@ public class ParkingHouseManager {
 			synchronized (lockObj) {
 				int slot = getAvailableSlot();
 				if (slot != -1) {
-					Car car = queue.GetACarToPark();
+					Car car = queue.getACarToPark();
 					if (car != null) {
-						parkingSlots[slot].setCar(car);
+						parkingSlots[slot].setParkedCar(car);
 						System.out.println(car.getRegnr().toString());
 					}
 
@@ -77,8 +77,8 @@ public class ParkingHouseManager {
 		for (int i = 0;i<maxIterations;i++) {
 			synchronized(lockObj) {
 				index = getACarToDepart();
-				if ( index >=0 && parkingSlots[index].getCar() != null) {
-					Car car = parkingSlots[index].getCar();
+				if ( index >=0 && parkingSlots[index].getParkedCar() != null) {
+					Car car = parkingSlots[index].getParkedCar();
 					System.out.println("hämtar bil med regnr" + car.getRegnr());
 					parkingSlots[index] = new ParkSlot();
 				}
@@ -110,7 +110,7 @@ public class ParkingHouseManager {
 
 	private int getAvailableSlot() {
 		for (int i = 0; i < parkingSlots.length; i++) {
-			if (parkingSlots[i].getCar() == null) {
+			if (parkingSlots[i].getParkedCar() == null) {
 				return i;
 			}
 		}
