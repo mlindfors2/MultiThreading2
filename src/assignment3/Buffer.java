@@ -114,9 +114,10 @@ public class Buffer {
 			queue.addLast(item);
 			bufferStatus.setValue(queue.size());
 			lblMax.setText("Max capacity: " + queue.size() + "/" + maxCapacity);
-			mutex.release();
+//			mutex.release();
 			readSemaphore.release();
 //		}
+			mutex.release();
 	}
 
 	/**
@@ -145,8 +146,9 @@ public class Buffer {
 			item = queue.removeFirst();
 			bufferStatus.setValue(queue.size());
 			lblMax.setText("Max capacity: " + queue.size() + "/" + maxCapacity);
-			mutex.release();
+//			mutex.release();
 			writeSemaphore.release();
+			mutex.release();
 			return item;
 //		}
 //		return null;
