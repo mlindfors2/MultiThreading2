@@ -6,21 +6,6 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 public class StartAssignment5 {
-//
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					createAndShowUI();
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
-	
-	
-	
 		public static void main(String[] args) {
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
